@@ -22,3 +22,23 @@ Make sure you've completed the Den of Evil first.
     workon diablo2
     # Run the script. It first creates a backup of your save file
     python d2hax.py --reset-stats --file "/Applications/Diablo II/Save/sohax.d2s"
+
+## Unlock all waypoints
+
+The script unlocks all waypoints in all difficulties. Currently untested for Nightmare and Hell.
+
+    # Activate the virtualenv
+    workon diablo2
+    # Run the script. It first creates a backup of your save file
+    python d2hax.py --unlock-waypoints --file "/Applications/Diablo II/Save/sohax.d2s"
+
+## How it works
+
+The D2 single player save file is a mostly deterministic, binary serialization of some data structure that persists the state of your character and progress into the game.
+
+So without knowing the individual fields of the struct, we can use trial and error to figure out what each part of the save file represents, byte by byte.
+We modify some state in the game, look at the binary dump, and examine which bits changed, and what their offset was into the file.
+
+We then can modify those bits and apply a checksum over the new binary data.
+As a result, we've edited the data persisted in your character's save file.
+

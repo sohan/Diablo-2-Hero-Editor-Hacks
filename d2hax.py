@@ -54,7 +54,19 @@ def int2bytes(i):
 
 def reset_stats(byte_array):
   byte_array = np.copy(byte_array)
+  # Found this position through trial and error by
+  # completing the Den of Evil, resetting stats, and seeing
+  # which bits changed in the binary save file
   byte_array[427] = np.uint8(2)
+  return byte_array
+
+def unlock_waypoints(byte_array):
+  difficulty_offsets = [641, 665, 689]
+  for difficulty_offset in difficulty_offsets:
+    # 39 waypoints in total. start at byte offset 2 from difficulty_offset
+    new_bytes = np.packbits([1] * 39)
+    for i, new_byte in enumerate(new_bytes):
+      byte_array[difficulty_offset + 2 + i] = new_byte
   return byte_array
 
 def write_d2s(byte_array, out_fname='sohax.d2s'):
@@ -70,11 +82,13 @@ def backup(save_file):
   shutil.copyfile(save_file, new_path)
   print('copied {} to {}'.format(save_file, new_path))
 
-def main(save_file, should_reset_stats=False):
+def main(save_file, should_reset_stats=False, should_unlock_waypoints=False):
   backup(save_file)
   data = np.fromfile(save_file, dtype=np.uint8)
   if should_reset_stats:
     data = reset_stats(data)
+  if should_unlock_waypoints:
+    data = unlock_waypoints(data)
   write_d2s(data, save_file)
 
 if __name__ == '__main__':
@@ -87,9 +101,13 @@ if __name__ == '__main__':
     '--reset-stats', dest='should_reset_stats', action='store_true', default=False,
     help='Bribe Akara to reset your stats again'
   )
+  parser.add_argument(
+    '--unlock-waypoints', dest='should_unlock_waypoints', action='store_true', default=False,
+    help='Unlock all waypoints in every difficulty'
+  )
   args = parser.parse_args()
   if not args.save_file:
     print('Must specify path to save file')
     sys.exit(0)
 
-  main(args.save_file, args.should_reset_stats)
+  main(args.save_file, args.should_reset_stats, args.should_unlock_waypoints)

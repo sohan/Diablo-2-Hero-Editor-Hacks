@@ -32,6 +32,15 @@ The script unlocks all waypoints in all difficulties. Currently untested for Nig
     # Run the script. It first creates a backup of your save file
     python d2hax.py --unlock-waypoints --file "/Applications/Diablo II/Save/sohax.d2s"
 
+## Reset the Hell's Forge quest
+
+The script can reset your hell forge quest, so you can re-kill Hephasto and reap the rewards on the forge again.
+
+    # Activate the virtualenv
+    workon diablo2
+    # Run the script. It first creates a backup of your save file
+    python d2hax.py --reset-forge --difficulty 2 --file "/Applications/Diablo II/Save/sohax.d2s"
+
 ## How it works
 
 The D2 single player save file is a mostly deterministic, binary serialization of some data structure that persists the state of your character and progress into the game.

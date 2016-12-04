@@ -41,6 +41,15 @@ The script can reset your hell forge quest, so you can re-kill Hephasto and reap
     # Run the script. It first creates a backup of your save file
     python d2hax.py --reset-forge --difficulty 2 --file "/Applications/Diablo II/Save/sohax.d2s"
 
+## Reset the Socket quest
+
+The script can reset your Act 5 quest from Larzuk with the Socket reward, so you can socket as many items as you'd like.
+
+    # Activate the virtualenv
+    workon diablo2
+    # Run the script. It first creates a backup of your save file
+    python d2hax.py --reset-socket --difficulty 1 --file "/Applications/Diablo II/Save/sohax.d2s"
+
 ## How it works
 
 The D2 single player save file is a mostly deterministic, binary serialization of some data structure that persists the state of your character and progress into the game.

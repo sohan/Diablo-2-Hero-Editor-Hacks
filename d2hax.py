@@ -78,9 +78,15 @@ def difficulty_offset(difficulty):
     return HELL_QUEST_POS
 
 def reset_forge(byte_array, difficulty):
-  act4_pos = difficulty_offset(difficulty) + 50 + 4
-  byte_array[act4_pos] = np.uint8(0)
-  byte_array[act4_pos + 1] = np.uint8(0)
+  quest_offset = difficulty_offset(difficulty) + 50 + 4
+  byte_array[quest_offset] = np.uint8(0)
+  byte_array[quest_offset + 1] = np.uint8(0)
+  return byte_array
+
+def reset_socket(byte_array, difficulty):
+  quest_offset = difficulty_offset(difficulty) + 70
+  byte_array[quest_offset] = np.uint8(0)
+  byte_array[quest_offset + 1] = np.uint8(0)
   return byte_array
 
 def write_d2s(byte_array, out_fname='sohax.d2s'):
@@ -102,7 +108,7 @@ def main(
     should_unlock_waypoints=False,
     difficulty=1,
     should_reset_forge=False,
-    should_reset_meph=False):
+    should_reset_socket=False):
   backup(save_file)
   data = np.fromfile(save_file, dtype=np.uint8)
   if should_reset_stats:
@@ -111,8 +117,8 @@ def main(
     data = unlock_waypoints(data)
   if should_reset_forge:
     data = reset_forge(data, difficulty)
-  if should_reset_meph:
-    data = reset_meph(data, difficulty)
+  if should_reset_socket:
+    data = reset_socket(data, difficulty)
   write_d2s(data, save_file)
 
 if __name__ == '__main__':
@@ -131,7 +137,11 @@ if __name__ == '__main__':
   )
   parser.add_argument(
     '--reset-forge', dest='should_reset_forge', action='store_true', default=False,
-    help='Reset the Hell\'s Forge quest'
+    help='Reset the Act 4 Hell\'s Forge quest'
+  )
+  parser.add_argument(
+    '--reset-socket', dest='should_reset_socket', action='store_true', default=False,
+    help='Reset the Act 5 Siege on Harrogath Quest, which gives the Socket reward'
   )
   parser.add_argument(
     '--difficulty', dest='difficulty', default=1, type=int,
@@ -148,4 +158,5 @@ if __name__ == '__main__':
     args.should_unlock_waypoints,
     args.difficulty,
     args.should_reset_forge,
+    args.should_reset_socket,
   )

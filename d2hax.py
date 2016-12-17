@@ -72,7 +72,7 @@ def unlock_waypoints(byte_array):
 def difficulty_offset(difficulty):
   if difficulty == 1:
     return NORMAL_QUEST_POS
-  elif difficulty == 1:
+  elif difficulty == 2:
     return NM_QUEST_POS
   else:
     return HELL_QUEST_POS

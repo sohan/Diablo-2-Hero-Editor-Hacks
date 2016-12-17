@@ -89,6 +89,12 @@ def reset_socket(byte_array, difficulty):
   byte_array[quest_offset + 1] = np.uint8(0)
   return byte_array
 
+def reset_arreat(byte_array, difficulty):
+  quest_offset = difficulty_offset(difficulty) + 71
+  byte_array[quest_offset] = np.uint8(0)
+  byte_array[quest_offset + 1] = np.uint8(0)
+  return byte_array
+
 def write_d2s(byte_array, out_fname='sohax.d2s'):
   byte_array = np.copy(byte_array)
   checksum = calculate_checksum(byte_array)
@@ -108,7 +114,8 @@ def main(
     should_unlock_waypoints=False,
     difficulty=1,
     should_reset_forge=False,
-    should_reset_socket=False):
+    should_reset_socket=False,
+    should_reset_arreat=False):
   backup(save_file)
   data = np.fromfile(save_file, dtype=np.uint8)
   if should_reset_stats:
@@ -119,6 +126,8 @@ def main(
     data = reset_forge(data, difficulty)
   if should_reset_socket:
     data = reset_socket(data, difficulty)
+  if should_reset_arreat:
+    data = reset_arreat(data, difficulty)
   write_d2s(data, save_file)
 
 if __name__ == '__main__':
@@ -144,6 +153,10 @@ if __name__ == '__main__':
     help='Reset the Act 5 Siege on Harrogath Quest, which gives the Socket reward'
   )
   parser.add_argument(
+    '--reset-arreat', dest='should_reset_arreat', action='store_true', default=False,
+    help='Reset the Act 5 Rescue on Mount Arreat quest, which gives the three runes reward'
+  )
+  parser.add_argument(
     '--difficulty', dest='difficulty', default=1, type=int,
     help='Difficulty for resetting quests. 1 for normal, 2 for nm, and 3 for hell'
   )
@@ -159,4 +172,5 @@ if __name__ == '__main__':
     args.difficulty,
     args.should_reset_forge,
     args.should_reset_socket,
+    args.should_reset_arreat
   )

@@ -103,7 +103,7 @@ def write_d2s(byte_array, out_fname='sohax.d2s'):
   print('wrote new file to {}'.format(out_fname))
 
 def backup(save_file):
-  new_fname = '{}.{}'.format(os.path.basename(save_file), time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime()))
+  new_fname = '{}.{}'.format(os.path.basename(save_file), time.strftime("%Y%m%d_%H%M%S", time.gmtime()))
   new_path = os.path.join(os.path.dirname(save_file), new_fname)
   shutil.copyfile(save_file, new_path)
   print('copied {} to {}'.format(save_file, new_path))
